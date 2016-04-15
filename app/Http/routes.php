@@ -11,10 +11,12 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', ['middleware' => 'auth.basic', function() 
+{
     return view('welcome');
-});
+}]);
 
-Route::get('/digined', function () {
-    return view('digined');
+Route::group(array('prefix' => 'api/v1', 'middleware' => 'auth.basic'), function()
+{
+	Route::get('name', ['uses' => 'PostController@getPageName']);
 });
