@@ -18,5 +18,6 @@ Route::get('/', ['middleware' => 'auth.basic', function()
 
 Route::group(array('prefix' => 'api/v1', 'middleware' => 'auth.basic'), function()
 {
-	Route::get('name', ['uses' => 'PostController@getPageName']);
+	Route::get('name', ['uses' => 'PostsController@getPageName']);
+	Route::get('posts', ['uses' => 'PostsController@getPosts']);
 });

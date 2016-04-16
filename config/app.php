@@ -156,11 +156,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /*
-         * Third party providers
-         */
-        SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider::class,
-
     ],
 
     /*

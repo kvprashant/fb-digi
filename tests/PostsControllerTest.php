@@ -3,9 +3,24 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\User;
 
 class PostsControllerTest extends TestCase
 {
+    /**
+     * Tests basic authentication for REST endpoint 
+     *
+     * @return void
+     */
+    public function testBasicAuth() {
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+        $this->seeIsAuthenticatedAs($user);
+    }
+
     /**
      * Tests the name of the page being retrieved by REST
      * 
@@ -13,29 +28,49 @@ class PostsControllerTest extends TestCase
      */
     public function testPageName()
     {
-        $response = $this->get('api/v1/name?page=cocacolanetherlands');
-        $this->assertEqual($response, 'Coca-Cola');
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+        $this->get('api/v1/name?page=cocacolanetherlands')->seeJson();
     }
 
     /**
-     * Tests if the posts are JSON format
+     * Tests if the posts are in the right JSON structure
      *
      * @return void
      */
-    public function testIfJson()
+    public function testJsonStructure()
     {
-        $response = $this->get('api/v1/posts?page=cocacolanetherlands');
-        $this->assertIsJson($response);
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+        $this->get('api/v1/name?page=cocacolanetherlands')
+             ->seeJsonStructure([
+                'error',
+                'data' => ['name','id']
+                ]);
     }
 
     /**
-     * Tests number of posts returned by the REST API
+     * Tests structure of the get posts API endpoint
      *
      * @return void
      */
     public function testNumberOfPosts()
     {
-        $response = $this->get('api/v1/posts?page=cocacolanetherlands&limit=20');
-        $this->assertEqual(count($response), 20);
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+        $this->get('api/v1/posts?page=cocacolanetherlands&limit=20')
+             ->seeJsonStructure([
+                'data' => [['message','id','created_time']],
+                'paging' => ['previous','next']                
+                ]);
     }
 }
