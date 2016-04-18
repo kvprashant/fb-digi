@@ -11,10 +11,9 @@
 |
 */
 
-Route::get('/', ['middleware' => 'auth.basic', function() 
-{
-    return view('welcome');
-}]);
+Route::get('visualization', function() {
+  return view('visualization');
+});
 
 Route::group(array('prefix' => 'api/v1', 'middleware' => 'auth.basic'), function()
 {
