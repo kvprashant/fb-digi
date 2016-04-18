@@ -73,4 +73,54 @@ class PostsControllerTest extends TestCase
                 'paging' => ['previous','next']                
                 ]);
     }
+
+    /**
+     * Tests the schema of the data structure
+     *
+     * @return void
+     */
+    public function testParser()
+    {
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+
+        $this->get('api/v1/posts_ordered_by_likes?page=cocacolanetherlands&limit=20')->seeJson(array('id' => '326525887549566_515539971981489'));
+    }
+
+    /**
+     * Tests the sort order of likes
+     *
+     * @return void
+     */
+    public function testSortOrder()
+    {
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+
+        $this->get('api/v1/top_user_likes');
+        $this->AssertTrue(FALSE);
+    }
+
+    /**
+     * Test count of user likes 
+     *
+     * @return void
+     */
+    public function testUserLikesCount()
+    {
+        $user = new User(array(
+            'email' => env('USERNAME'),
+            'password' => env('PASSWORD')
+        ));
+        $this->be($user);
+
+        $this->get('api/v1/top_user_likes');
+        $this->AssertTrue(FALSE);  
+    }
 }

@@ -20,4 +20,5 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => 'auth.basic'), function
 {
 	Route::get('name', ['uses' => 'PostsController@getPageName']);
 	Route::get('posts', ['uses' => 'PostsController@getPosts']);
+	Route::get('posts_ordered_by_likes', ['uses' => 'PostsController@getPostsOrderedByLikes']);
 });
