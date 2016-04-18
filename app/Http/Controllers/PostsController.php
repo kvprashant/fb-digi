@@ -6,7 +6,9 @@ use Request;
 use Response;
 
 use Facebook\Facebook;
+use Facebook\FacebookApp;
 use Facebook\Authentication\AccessToken;
+use Facebook\FacebookRequest;
 
 use App\Posts;
 
@@ -196,4 +198,75 @@ class PostsController extends Controller
       400
     );
   }
+
+  /**
+   * Returns the top five users who have liked the top 20 posts
+   *
+   * @return Response
+   */
+  public function getTopUsers()
+  {
+    $fb = new Facebook([
+      'app_id' => env('FACEBOOK_APP_ID'),
+      'app_secret' => env('FACEBOOK_APP_SECRET'),
+      'default_graph_version' => 'v2.5'
+    ]);
+    $accessToken = new AccessToken(env('FACEBOOK_APP_ID').'|'.env('FACEBOOK_APP_SECRET'));
+
+    //TODO Add the page field to query from the database once the page field is added to the Like model
+    $posts = Posts::orderBy('likes_count', 'asc')
+                    ->take(20)
+                    ->get(['post_id']);
+
+    // We will add all the likes into this array
+    $likes = array();
+    foreach ($posts as $postRecord) {
+      $postId = $postRecord['post_id'];
+      $request = new FacebookRequest(
+        $fb->getApp(),
+        $accessToken,
+        'GET',
+        $postId.'/likes?fields=name&limit=100'
+      );
+      try {
+        $response = $fb->getClient()->sendRequest($request);
+        $graphEdge = $response->getGraphEdge();
+
+      } catch(Facebook\Exceptions\FacebookResponseException $e) {
+        // When Graph returns an error
+        echo 'Graph returned an error: ' . $e->getMessage();
+        exit;
+      } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        // When validation fails or other local issues
+        echo 'Facebook SDK returned an error: ' . $e->getMessage();
+        exit;
+      }
+
+      $postLikes = array();
+      // Implementing pagination here
+      if ($fb->next($graphEdge)) {  
+        $likesArray = $graphEdge->asArray();
+        $postLikes = array_merge($postLikes, $likesArray); 
+        while ($graphEdge = $fb->next($graphEdge)) { 
+            $likesArray = $graphEdge->asArray();
+            $postLikes = array_merge($postLikes, $likesArray);
+        }
+      } else {
+        $likesArray = $graphEdge->asArray();
+        $postLikes = array_merge($postLikes, $likesArray);
+      }
+
+      foreach ($postLikes as $status) {
+        array_push($likes, $status['name']);
+      }
+
+    }
+
+    $likesFrequency = array_count_values($likes);
+    arsort($likesFrequency, SORT_NUMERIC);
+    $topUsersArray = array_slice($likesFrequency, 0, 5);
+    
+    return Response::json($topUsersArray, 200);
+  }
+
 }

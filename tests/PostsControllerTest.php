@@ -94,7 +94,7 @@ class PostsControllerTest extends TestCase
         ));
         $this->be($user);
 
-        $this->get('api/v1/posts_ordered_by_likes?page=cocacolanetherlands&limit=20')->seeJson(array('id' => '326525887549566_515539971981489'));
+        $this->get('api/v1/posts_ordered_by_likes?page=cocacolanetherlands&limit=20')->seeJson(array('post_id' => '326525887549566_515539971981489'));
     }
 
     /**
