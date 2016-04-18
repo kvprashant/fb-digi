@@ -14,10 +14,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../../resources/assets/' => public_path(),
+            __DIR__.'/../../node_modules/datamaps/dist/datamaps.world.min.js' => public_path('js/datamaps.world.min.js'),
         ], 'public');
         $this->publishes([
-            __DIR__.'/../../node_modules/datamaps/dist/datamaps.world.min.js' => public_path('js/datamaps.world.min.js'),
+            __DIR__.'/../../node_modules/d3/d3.min.js' => public_path('js/d3.min.js'),
         ], 'public');
     }
 
