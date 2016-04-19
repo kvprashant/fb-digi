@@ -5,6 +5,10 @@ This repository provides 4 REST endpoints for retrieving data from a Facebook pa
 
 ### Documentation
 
+Make sure you have,
+1. Created a database with credentials
+2. You have a valid .env file with all the credentials
+
 #### Getting Started
 
 ```
@@ -15,12 +19,10 @@ npm install
 composer install
 
 php artisan migrate
-php artisan vendor:publish --tag=public --force
+php artisan db:seed //creates two users for the application
+php artisan key:generate
 
 gulp --production
-
-cp .env.example .env
-php artisan key:generate
 ```
 
 Make sure you set your `APP_URL` environment variable to your current hosting domain. 
