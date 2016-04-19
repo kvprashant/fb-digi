@@ -11,6 +11,7 @@ body {
   display: table;
   font-weight: 40;
   font-family: 'Lato';
+  color: #000;
 }
 
 #container {
@@ -28,12 +29,18 @@ body {
     font-weight: bold;
   }
 
-  p {
+  &>p {
     color: #3f3f3f;
   }
 }
 
-
 .datamaps-subunits {
   margin-top: 3rem;
+}
+
+.hoverinfo {
+  font-family: 'Lato';
+  font-size: 12px;
+  color: #ffffff!important;
+  background-color: #9f9f9f!important;
 }

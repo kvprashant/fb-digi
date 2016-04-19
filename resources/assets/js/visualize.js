@@ -39,7 +39,8 @@ function getColor() {
 
 var countries,
     likes,
-    pageLikes = [];
+    pageLikes = [],
+    fills = [];
 
 //Loads countries ISO codes
 httpGetAsync(getBaseUrl()+'countries.json', function(response){
@@ -53,6 +54,28 @@ var height = document.getElementById('container').offsetHeight;
 //Data
 httpGetAsync(getBaseUrl()+'/api/v1/page_insight?page=297779776717', function(response){
   likes = JSON.parse(response);
+
+  for (var alpha2 in likes) {
+    // console.log([countries[alpha2].alpha3, likes[alpha2], Math.round(100*Math.log(likes[alpha2]))].join(' | '));
+    if(!countries.hasOwnProperty(alpha2)) {
+      continue;
+    }
+
+    var alpha3 = countries[alpha2].alpha3;
+    pageLikes.push({
+      name: countries[alpha2].country,
+      radius: Math.round(1.2*Math.log(likes[alpha2])),
+      likes: likes[alpha2],
+      country: countries[alpha2].alpha3,
+      fillKey: countries[alpha2].alpha3,
+      centered: countries[alpha2].alpha3
+    });
+
+    fills[alpha3] = randomColor();
+  }
+  fills['UNKNOWN'] = 'rgb(0,0,0)';
+  fills['defaultFill'] = '#CDCCCC';
+
   // Datamap constructor, fill in the options from the docs
   var worldMap = new Datamap({
     element: document.getElementById('container'),
@@ -60,11 +83,7 @@ httpGetAsync(getBaseUrl()+'/api/v1/page_insight?page=297779776717', function(res
       highlightOnHover: false,
       popupOnHover: false
     },
-    fills: {
-      YES: '#666666',
-      UNKNOWN: 'rgb(0,0,0)',       // These are
-      defaultFill: '#CDCCCC'       // the colours
-    },
+    fills: fills,
     setProjection: function(element, options) {
       var projection, path;
       projection = d3.geo.mercator()                          // The d3 projection
@@ -76,21 +95,6 @@ httpGetAsync(getBaseUrl()+'/api/v1/page_insight?page=297779776717', function(res
       return {path: path, projection: projection};
     }
   });
-
-  for (var alpha2 in likes) {
-    // console.log([countries[alpha2].alpha3, likes[alpha2], Math.round(100*Math.log(likes[alpha2]))].join(' | '));
-    if(!countries.hasOwnProperty(alpha2)) {
-      continue;
-    }
-    pageLikes.push({
-      name: countries[alpha2].country,
-      radius: Math.round(2*Math.log(likes[alpha2])),
-      likes: likes[alpha2],
-      country: countries[alpha2].alpha3,
-      fillKey: 'YES',
-      centered: countries[alpha2].alpha3
-    });
-  }
 
   //draw bubbles for likes
   worldMap.bubbles(pageLikes, {
