@@ -8,7 +8,7 @@ This repository provides 4 REST endpoints for retrieving data from a Facebook pa
 #### Getting Started
 
 ```
-git clone https://github.com/kvprashant/fb-digi.gi <YOUR_PROJECT>
+git clone https://github.com/kvprashant/fb-digi.git <YOUR_PROJECT>
 cd path/to/YOUR_PROJECT
 
 npm install
@@ -43,4 +43,4 @@ Other important environment variables are: `DB_DATABASE`, `DB_USERNAME`, `DB_PAS
 ### Visualization of a Facebook page's fans by country
 `http://hosting.domain/visualization`
 
-Login using the credentials and you will be able to see the visualization
+Login using the credentials and you will be able to see the visualization of KPN's page
