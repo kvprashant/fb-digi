@@ -33,7 +33,6 @@
       <p>This page visualizes the fans of <a href="https://www.facebook.com/KPN" target="_blank">KPN's Facebook page</a> across the world</p>
     </div>
   </div>
-  {{ Html::script('js/randomColor.js') }}
   {{ Html::script('js/d3.min.js') }}
   {{ Html::script('js/datamaps.world.min.js') }}
   {{ Html::script('js/app.min.js') }}
