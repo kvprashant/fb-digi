@@ -38,7 +38,7 @@ class PostsControllerTest extends TestCase
         'password' => env('PASSWORD')
         ));
       $this->be($user);
-      $this->get('api/v1/name?page=KPN')->seeJson();
+      $this->get('api/v1/name?page=cocacolanetherlands')->seeJson();
     }
 
     /**
@@ -72,18 +72,24 @@ class PostsControllerTest extends TestCase
         'password' => env('PASSWORD')
         ));
       $this->be($user);
-      $this->get('api/v1/posts?page=cocacolanetherlands&limit=1')
-      
-      // ->seeJsonStructure([
-      //   'data' => [['id', 
-      //   'created_time', 
-      //   ['likes' => 
-      //   'data',
-      //   ['summary' => 'total_count', 'can_like' , 'has_liked']
-      //   ]
-      //   ]],
-      //   'paging' => ['previous','next']                
-      //   ]);
+      // $response = $this->call('get', 'api/v1/posts?page=cocacolanetherlands&limit=2');
+      // var_dump($response->content());
+      $this->get('api/v1/posts?page=cocacolanetherlands&limit=5')
+      ->seeJsonStructure(
+        [
+          ['id', 
+           'created_time', 
+           'likes' => [
+              'data',
+              'summary' => [
+                'total_count', 
+                'can_like' , 
+                'has_liked'
+              ]
+            ]
+          ]
+        ]
+      );
     }
 
     /**
@@ -128,7 +134,23 @@ class PostsControllerTest extends TestCase
         'password' => env('PASSWORD')
         ));
       $this->be($user);
-      return 1===1;
+
+      //get posts sorted by likes using api
+      $response = $this->call('get', 'api/v1/posts_ordered_by_likes?page=cocacolanetherlands&limit=20');
+      $posts = json_decode($response->content(), true);
+
+      //get all the like counts into array
+      $likesCount = array();
+      foreach ($posts as $post) {
+        array_push($likesCount, $post['likes_count']);
+      }
+
+      //Another to sort the likes
+      $sortedLikesCount = $likesCount;
+      rsort($sortedLikesCount);
+
+      //assert values of both arrays for test
+      $this->AssertTrue($likesCount===$sortedLikesCount);
     }
 
     /**
@@ -143,6 +165,12 @@ class PostsControllerTest extends TestCase
         'password' => env('PASSWORD')
         ));
       $this->be($user);
-      $this->AssertTrue(TRUE);  
+
+      //get top 5 user likes
+      $response = $this->call('get', '/api/v1/top_user_likes?page=cocacolanetherlands&limit=2');
+      $ar = json_decode($response->content(), true);
+      
+      //assert number of top users
+      $this->AssertTrue(count($ar)===5);
     }
   }
