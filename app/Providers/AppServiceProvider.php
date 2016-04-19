@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../node_modules/d3/d3.min.js' => public_path('js/d3.min.js'),
         ], 'public');
+        $this->publishes([
+            __DIR__.'/../../node_modules/randomcolor/randomColor.js' => public_path('js/randomColor.js'),
+        ], 'public');
     }
 
     /**
