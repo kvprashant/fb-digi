@@ -1,6 +1,8 @@
 Social mining and visualization tool
 ====================================
 
+![Latest Stable Version](https://img.shields.io/badge/Latest%20Release-0.1.0--alpha-green.svg)
+
 This repository provides 4 REST endpoints for retrieving data from a Facebook page and visualization of a page's fans by country.
 
 ### Documentation
