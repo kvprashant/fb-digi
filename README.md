@@ -30,7 +30,7 @@ Make sure you set your `APP_URL` environment variable to your current hosting do
 Other important environment variables are: `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`
 
 #### Retrieve a page name
-`curl --user username:password http://hosting.domain/api/v1/`
+`curl --user username:password http://hosting.domain/api/v1/name?page=cocacolanetherlands`
 
 
 #### Retrieve the latest `n` posts
