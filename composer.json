@@ -39,6 +39,7 @@
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "mkdir bootstrap/cache",
             "php artisan optimize",
             "php artisan vendor:publish --tag=public --force"
         ],
