@@ -22,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../node_modules/randomcolor/randomColor.js' => public_path('js/randomColor.js'),
         ], 'public');
+        $this->publishes([
+            __DIR__.'/../../resources/assets/countries.json' => public_path('countries.json'),
+        ], 'public');
     }
 
     /**
